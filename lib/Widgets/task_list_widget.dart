@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todo_firebase/Screens/delete_confirmation_dialog.dart';
+import 'package:todo/Screens/delete_confirmation_dialog.dart';
 
 class TaskList extends StatelessWidget {
   final Stream<QuerySnapshot>? todoStream;
 
-  const TaskList({
-    super.key,
-    required this.todoStream,
-  });
+  const TaskList({super.key, required this.todoStream});
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +25,7 @@ class TaskList extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.w700),
                   ),
                   trailing: IconButton(
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
+                    icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
                       print('Document ID to be deleted: ${docSnap.id}');
                       showDialog(
@@ -43,13 +37,11 @@ class TaskList extends StatelessWidget {
                     },
                   ),
                 );
-              },  
+              },
             ),
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

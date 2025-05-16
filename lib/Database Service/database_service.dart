@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
   Future addPersonalTask(
-      Map<String, dynamic> userPersonalMap, String id) async {
+    Map<String, dynamic> userPersonalMap,
+    String id,
+  ) async {
     return await FirebaseFirestore.instance
         .collection("Personal")
         .doc(id)
@@ -10,7 +12,9 @@ class DatabaseService {
   }
 
   Future addOfficialTask(
-      Map<String, dynamic> userOfficialMap, String id) async {
+    Map<String, dynamic> userOfficialMap,
+    String id,
+  ) async {
     return await FirebaseFirestore.instance
         .collection("Official")
         .doc(id)
@@ -21,7 +25,6 @@ class DatabaseService {
     return FirebaseFirestore.instance.collection(task).snapshots();
   }
 
-  // New function to delete a task
   Future deleteTask(String collectionName, String documentId) async {
     return await FirebaseFirestore.instance
         .collection(collectionName)

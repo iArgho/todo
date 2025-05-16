@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todo_firebase/Database%20Service/database_service.dart';
-import 'package:todo_firebase/Screens/todo_task_dialog_screen.dart';
-import 'package:todo_firebase/Widgets/official_task_widget.dart';
-import 'package:todo_firebase/Widgets/personal_task_widget.dart';
-import 'package:todo_firebase/Widgets/task_list_widget.dart';
+import 'package:todo/Database%20Service/database_service.dart';
+import 'package:todo/Screens/todo_task_dialog_screen.dart';
+import 'package:todo/Widgets/official_task_widget.dart';
+import 'package:todo/Widgets/personal_task_widget.dart';
+import 'package:todo/Widgets/task_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,8 +18,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Stream<QuerySnapshot>? todoStream;
 
   loadTask() async {
-    todoStream =
-        await DatabaseService().getTask(_personal ? "Personal" : "Official");
+    todoStream = await DatabaseService().getTask(
+      _personal ? "Personal" : "Official",
+    );
     setState(() {});
   }
 
@@ -37,14 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           openBox(context);
         },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 40,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        child: const Icon(Icons.add, color: Colors.white, size: 40),
       ),
       body: SafeArea(
         child: Container(
@@ -64,9 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -86,12 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TaskList(
-                  todoStream: todoStream,
-                ),
+                const SizedBox(height: 20),
+                TaskList(todoStream: todoStream),
               ],
             ),
           ),
@@ -101,9 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void openBox(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => TodoTaskDialog(),
-    );
+    showDialog(context: context, builder: (context) => TodoTaskDialog());
   }
 }

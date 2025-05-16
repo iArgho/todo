@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:random_string/random_string.dart';
-import 'package:todo_firebase/Database%20Service/database_service.dart';
+import 'package:todo/Database%20Service/database_service.dart';
 
 class TodoTaskDialog extends StatelessWidget {
   TodoTaskDialog({super.key});
@@ -9,9 +9,7 @@ class TodoTaskDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       elevation: 10,
       backgroundColor: Colors.white,
       child: Padding(
@@ -51,14 +49,10 @@ class TodoTaskDialog extends StatelessWidget {
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Enter your task here',
-                  hintStyle: TextStyle(
-                    fontSize: 20.0,
-                  ),
+                  hintStyle: TextStyle(fontSize: 20.0),
                 ),
                 maxLines: 10,
-                style: const TextStyle(
-                  fontSize: 15.0,
-                ),
+                style: const TextStyle(fontSize: 15.0),
               ),
             ),
             const SizedBox(height: 20),
@@ -80,8 +74,10 @@ class TodoTaskDialog extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightBlueAccent,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 5,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                     ),
@@ -110,8 +106,10 @@ class TodoTaskDialog extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 57, 254, 169),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 0,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                     ),
