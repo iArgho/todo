@@ -1,34 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
-  Future addPersonalTask(
-    Map<String, dynamic> userPersonalMap,
-    String id,
-  ) async {
+  Future addTask(Map<String, dynamic> taskData, String id) async {
     return await FirebaseFirestore.instance
-        .collection("Personal")
+        .collection("tasks")
         .doc(id)
-        .set(userPersonalMap);
+        .set(taskData);
   }
 
-  Future addOfficialTask(
-    Map<String, dynamic> userOfficialMap,
-    String id,
-  ) async {
+  Future<Stream<QuerySnapshot>> getTasks() async {
+    return FirebaseFirestore.instance.collection("tasks").snapshots();
+  }
+
+  Future deleteTask(String id) async {
     return await FirebaseFirestore.instance
-        .collection("Official")
+        .collection("tasks")
         .doc(id)
-        .set(userOfficialMap);
-  }
-
-  Future<Stream<QuerySnapshot>> getTask(String task) async {
-    return FirebaseFirestore.instance.collection(task).snapshots();
-  }
-
-  Future deleteTask(String collectionName, String documentId) async {
-    return await FirebaseFirestore.instance
-        .collection(collectionName)
-        .doc(documentId)
         .delete();
   }
 }

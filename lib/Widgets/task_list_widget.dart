@@ -4,46 +4,58 @@ import 'package:todo/Screens/delete_confirmation_dialog.dart';
 
 class TaskList extends StatelessWidget {
   final Stream<QuerySnapshot>? todoStream;
+  final VoidCallback onTaskDeleted;
 
-  const TaskList({super.key, required this.todoStream});
+  const TaskList({
+    super.key,
+    required this.todoStream,
+    required this.onTaskDeleted,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: todoStream,
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasData) {
-          return Expanded(
-            child: ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                DocumentSnapshot docSnap = snapshot.data!.docs[index];
-                return ListTile(
-                  tileColor: Colors.greenAccent.shade400,
-                  title: Text(
-                    "   " + docSnap["task"],
-                    style: const TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      print('Document ID to be deleted: ${docSnap.id}');
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return DeleteConfirmationDialog(docId: docSnap.id);
-                        },
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
+    return Expanded(
+      child:
+          todoStream != null
+              ? StreamBuilder<QuerySnapshot>(
+                stream: todoStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot doc = snapshot.data!.docs[index];
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: ListTile(
+                            title: Text(doc['task']),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder:
+                                      (context) => DeleteConfirmationDialog(
+                                        docId: doc.id,
+                                        onTaskDeleted: onTaskDeleted,
+                                      ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text('No tasks found.'));
+                  }
+                },
+              )
+              : const Center(child: CircularProgressIndicator()),
     );
   }
 }

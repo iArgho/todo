@@ -3,7 +3,9 @@ import 'package:random_string/random_string.dart';
 import 'package:todo/Database%20Service/database_service.dart';
 
 class TodoTaskDialog extends StatelessWidget {
-  TodoTaskDialog({super.key});
+  final VoidCallback onTaskAdded;
+
+  TodoTaskDialog({super.key, required this.onTaskAdded});
   final TextEditingController _textTEController = TextEditingController();
 
   @override
@@ -56,74 +58,36 @@ class TodoTaskDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    String id = randomAlphaNumeric(10);
+            ElevatedButton(
+              onPressed: () {
+                String id = randomAlphaNumeric(10);
+                Map<String, dynamic> userTodo = {
+                  "task": _textTEController.text,
+                  "Id": id,
+                };
 
-                    Map<String, dynamic> userTodo = {
-                      "task": _textTEController.text,
-                      "Id": id,
-                    };
-
-                    DatabaseService().addPersonalTask(userTodo, id);
-
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightBlueAccent,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 5,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  child: const Text(
-                    'Personal',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                DatabaseService().addTask(userTodo, id);
+                onTaskAdded(); // Refresh UI
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightBlueAccent,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 5,
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    String id = randomAlphaNumeric(10);
-
-                    Map<String, dynamic> userTodo = {
-                      "task": _textTEController.text,
-                      "Id": id,
-                    };
-
-                    DatabaseService().addOfficialTask(userTodo, id);
-
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 57, 254, 169),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 0,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  child: const Text(
-                    'Official',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
                 ),
-              ],
+              ),
+              child: const Text(
+                'Add task',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),

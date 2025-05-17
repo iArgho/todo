@@ -3,10 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DeleteConfirmationDialog extends StatelessWidget {
   final String docId;
+  final VoidCallback onTaskDeleted;
 
   const DeleteConfirmationDialog({
     super.key,
     required this.docId,
+    required this.onTaskDeleted,
   });
 
   @override
@@ -16,23 +18,18 @@ class DeleteConfirmationDialog extends StatelessWidget {
       content: const Text('Are you sure you want to delete this task?'),
       actions: <Widget>[
         TextButton(
-          child: const Text('Cancel'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          child: const Text('Cancel', style: TextStyle(color: Colors.blue)),
+          onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: const Text('Delete'),
+          child: const Text('Delete', style: TextStyle(color: Colors.red)),
           onPressed: () async {
             try {
-              print('Attempting to delete document with ID: $docId');
-
-              CollectionReference tasks =
-                  FirebaseFirestore.instance.collection('tasks');
-
-              await tasks.doc(docId).delete();
-              // Log after successful deletion
-              print('Document with ID $docId deleted successfully');
+              await FirebaseFirestore.instance
+                  .collection('tasks')
+                  .doc(docId)
+                  .delete();
+              onTaskDeleted();
               Navigator.of(context).pop();
             } catch (e) {
               print('Error deleting document: $e');
