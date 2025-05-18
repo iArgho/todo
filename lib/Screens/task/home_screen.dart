@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todo/Database%20Service/database_service.dart';
-import 'package:todo/Screens/todo_task_dialog_screen.dart';
+import 'package:todo/Screens/task/todo_task_dialog_screen.dart';
 import 'package:todo/Widgets/task_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,7 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ToDo'),
+        title: const Text(
+          'ToDo',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+        ),
         centerTitle: true,
         backgroundColor: Colors.greenAccent.shade400,
       ),

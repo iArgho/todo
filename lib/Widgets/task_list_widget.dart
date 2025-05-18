@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todo/Screens/edit_task_screen.dart';
+import 'package:todo/Screens/task/edit_task_screen.dart';
 
 class TaskList extends StatelessWidget {
   final Stream<QuerySnapshot>? todoStream;
@@ -26,13 +26,32 @@ class TaskList extends StatelessWidget {
 
                   if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
                     return ListView.builder(
+                      padding: const EdgeInsets.all(12),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         DocumentSnapshot doc = snapshot.data!.docs[index];
                         return Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           child: ListTile(
-                            title: Text(doc['task']),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 16,
+                            ),
+                            leading: const Icon(
+                              Icons.task_alt,
+                              color: Colors.green,
+                            ),
+                            title: Text(
+                              doc['task'],
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                             trailing: IconButton(
                               icon: const Icon(Icons.edit, color: Colors.blue),
                               onPressed: () async {
@@ -57,7 +76,12 @@ class TaskList extends StatelessWidget {
                       },
                     );
                   } else {
-                    return const Center(child: Text('No tasks found.'));
+                    return const Center(
+                      child: Text(
+                        'No tasks found.',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    );
                   }
                 },
               )

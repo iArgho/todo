@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo/Screens/home_screen.dart';
+import 'package:todo/Screens/splash_screen.dart';
 
 class TodoApp extends StatelessWidget {
   const TodoApp({super.key});
@@ -9,8 +9,11 @@ class TodoApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Todo App',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomeScreen(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF4CAF50)),
+        useMaterial3: true,
+      ),
+      home: const SplashScreen(),
     );
   }
 }
