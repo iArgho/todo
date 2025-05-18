@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todo/Screens/delete_confirmation_dialog.dart';
+import 'package:todo/Screens/edit_task_screen.dart';
 
 class TaskList extends StatelessWidget {
   final Stream<QuerySnapshot>? todoStream;
@@ -35,15 +35,21 @@ class TaskList extends StatelessWidget {
                             title: Text(doc['task']),
                             trailing: IconButton(
                               icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder:
-                                      (context) => DeleteConfirmationDialog(
-                                        docId: doc.id,
-                                        onTaskDeleted: onTaskDeleted,
-                                      ),
+                              onPressed: () async {
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => EditTaskScreen(
+                                          docId: doc.id,
+                                          currentTask: doc['task'],
+                                        ),
+                                  ),
                                 );
+
+                                if (result == true) {
+                                  onTaskDeleted();
+                                }
                               },
                             ),
                           ),
