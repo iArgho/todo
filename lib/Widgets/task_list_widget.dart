@@ -34,7 +34,7 @@ class TaskList extends StatelessWidget {
                           child: ListTile(
                             title: Text(doc['task']),
                             trailing: IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
+                              icon: const Icon(Icons.edit, color: Colors.blue),
                               onPressed: () {
                                 showDialog(
                                   context: context,
