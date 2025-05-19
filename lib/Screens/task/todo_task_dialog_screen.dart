@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:random_string/random_string.dart';
-import 'package:todo/Database%20Service/database_service.dart';
+import 'package:todo/Service/network_service.dart';
 
 class TodoTaskDialog extends StatelessWidget {
   final VoidCallback onTaskAdded;
@@ -66,7 +66,7 @@ class TodoTaskDialog extends StatelessWidget {
                   "Id": id,
                 };
 
-                DatabaseService().addTask(userTodo, id);
+                NetworkService().addTask(userTodo, id);
                 onTaskAdded(); // Refresh UI
                 Navigator.pop(context);
               },

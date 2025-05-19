@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todo/Database%20Service/database_service.dart';
+import 'package:todo/Service/network_service.dart';
 import 'package:todo/Screens/auth/login_screen.dart';
 import 'package:todo/Screens/task/todo_task_dialog_screen.dart';
 import 'package:todo/Widgets/task_list_widget.dart';
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void loadTasks() async {
-    final stream = await DatabaseService().getTasks();
+    final stream = await NetworkService().getTasks();
     setState(() {
       taskStream = stream;
     });

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo/Screens/task/home_screen.dart';
+import 'package:todo/Service/auth_service.dart';
 
 class CreateProfileScreen extends StatefulWidget {
   const CreateProfileScreen({super.key});
@@ -20,6 +20,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen>
   late Animation<double> _fadeIn;
   bool _isLoading = false;
 
+  final AuthService _authService = AuthService();
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +33,28 @@ class _CreateProfileScreenState extends State<CreateProfileScreen>
     _controller.forward();
   }
 
+  void _registerUser() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isLoading = true);
+      try {
+        await _authService.registerUser(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
+      } finally {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -38,28 +62,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen>
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  void _registerUser() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
-      try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
-      } on FirebaseAuthException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message ?? 'Registration failed')),
-        );
-      } finally {
-        setState(() => _isLoading = false);
-      }
-    }
   }
 
   @override

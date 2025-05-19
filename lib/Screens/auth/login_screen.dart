@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:todo/Screens/auth/signup_screen.dart';
 import 'package:todo/Screens/task/home_screen.dart';
+import 'package:todo/Screens/auth/signup_screen.dart';
+import 'package:todo/Service/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,22 +16,24 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
+  final AuthService _authService = AuthService();
+
   void _loginUser() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
+        await _authService.loginUser(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
         );
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const HomeScreen()),
         );
-      } on FirebaseAuthException catch (e) {
+      } catch (e) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text(e.message ?? 'Login failed')));
+        ).showSnackBar(SnackBar(content: Text(e.toString())));
       } finally {
         setState(() => _isLoading = false);
       }
