@@ -59,16 +59,27 @@ class TodoTaskDialog extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                String id = randomAlphaNumeric(10);
-                Map<String, dynamic> userTodo = {
-                  "task": _textTEController.text,
-                  "Id": id,
-                };
-
-                NetworkService().addTask(userTodo, id);
-                onTaskAdded(); // Refresh UI
-                Navigator.pop(context);
+              onPressed: () async {
+                final taskText = _textTEController.text.trim();
+                if (taskText.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Task cannot be empty')),
+                  );
+                  return;
+                }
+                try {
+                  String id = randomAlphaNumeric(10);
+                  Map<String, dynamic> userTodo = {"task": taskText, "Id": id};
+                  await NetworkService().addTask(userTodo, id);
+                  print("Task added via dialog: $taskText");
+                  onTaskAdded();
+                  Navigator.pop(context);
+                } catch (e) {
+                  print("Error adding task: $e");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to add task: $e')),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.lightBlueAccent,

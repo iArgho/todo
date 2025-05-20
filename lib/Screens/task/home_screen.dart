@@ -23,10 +23,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void loadTasks() async {
-    final stream = await NetworkService().getTasks();
-    setState(() {
-      taskStream = stream;
-    });
+    try {
+      final stream = await NetworkService().getTasks();
+      setState(() {
+        taskStream = stream;
+      });
+    } catch (e) {
+      print("Error loading tasks: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to load tasks: $e')));
+    }
   }
 
   void openAddTaskDialog() {
@@ -52,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
             tooltip: 'Sign Out',
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
+              print("User signed out, navigating to LoginScreen");
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (_) => const LoginScreen()),

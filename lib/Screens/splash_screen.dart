@@ -33,14 +33,13 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateUser() {
     final user = FirebaseAuth.instance.currentUser;
+    print("Splash screen: Current user: ${user?.email ?? 'None'}");
     if (user != null) {
-      // User is signed in
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
     } else {
-      // No user signed in
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const LoginScreen()),

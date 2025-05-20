@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:todo/Screens/task/home_screen.dart';
 import 'package:todo/Service/auth_service.dart';
 
-class CreateProfileScreen extends StatefulWidget {
-  const CreateProfileScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<CreateProfileScreen> createState() => _CreateProfileScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _CreateProfileScreenState extends State<CreateProfileScreen>
+class _SignupScreenState extends State<SignupScreen>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
@@ -37,18 +37,23 @@ class _CreateProfileScreenState extends State<CreateProfileScreen>
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {
+        print(
+          "Attempting registration with email: ${_emailController.text.trim()}",
+        );
         await _authService.registerUser(
           _emailController.text.trim(),
           _passwordController.text.trim(),
+          _nameController.text.trim(),
         );
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const HomeScreen()),
         );
       } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(e.toString())));
+        print("Registration error: $e");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString().replaceAll('Exception: ', ''))),
+        );
       } finally {
         setState(() => _isLoading = false);
       }

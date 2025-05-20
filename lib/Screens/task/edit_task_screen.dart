@@ -49,9 +49,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           .collection('tasks')
           .doc(widget.docId)
           .update({'task': updatedText});
-
+      print("Task updated with ID: ${widget.docId}");
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
+      print("Error updating task: $e");
       if (mounted) {
         setState(() => _isUpdating = false);
         ScaffoldMessenger.of(
@@ -69,9 +70,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           .collection('tasks')
           .doc(widget.docId)
           .delete();
-
+      print("Task deleted with ID: ${widget.docId}");
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
+      print("Error deleting task: $e");
       if (mounted) {
         setState(() => _isDeleting = false);
         ScaffoldMessenger.of(
@@ -132,11 +134,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
             TextField(
               controller: _taskController,
               decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.green),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.green, width: 2),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.green, width: 2),
                 ),
                 border: const OutlineInputBorder(),
               ),

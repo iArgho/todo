@@ -4,6 +4,10 @@ import 'package:todo/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const TodoApp());
+  try {
+    await Firebase.initializeApp();
+    runApp(const TodoApp());
+  } catch (e) {
+    print("Firebase initialization failed: $e");
+  }
 }

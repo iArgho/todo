@@ -14,78 +14,76 @@ class TaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child:
-          todoStream != null
-              ? StreamBuilder<QuerySnapshot>(
-                stream: todoStream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+    return todoStream != null
+        ? StreamBuilder<QuerySnapshot>(
+          stream: todoStream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-                  if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-                    return ListView.builder(
-                      padding: const EdgeInsets.all(12),
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        DocumentSnapshot doc = snapshot.data!.docs[index];
-                        return Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 16,
-                            ),
-                            leading: const Icon(
-                              Icons.task_alt,
-                              color: Colors.green,
-                            ),
-                            title: Text(
-                              doc['task'],
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () async {
-                                final result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => EditTaskScreen(
-                                          docId: doc.id,
-                                          currentTask: doc['task'],
-                                        ),
-                                  ),
-                                );
+            if (snapshot.hasError) {
+              print("StreamBuilder error: ${snapshot.error}");
+              return Center(
+                child: Text('Error loading tasks: ${snapshot.error}'),
+              );
+            }
 
-                                if (result == true) {
-                                  onTaskDeleted();
-                                }
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: Text(
-                        'No tasks found.',
-                        style: TextStyle(fontSize: 16),
+            if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+              return ListView.builder(
+                padding: const EdgeInsets.all(12),
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot doc = snapshot.data!.docs[index];
+                  return Card(
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 16,
                       ),
-                    );
-                  }
+                      leading: const Icon(Icons.task_alt, color: Colors.green),
+                      title: Text(
+                        doc['task'],
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => EditTaskScreen(
+                                    docId: doc.id,
+                                    currentTask: doc['task'],
+                                  ),
+                            ),
+                          );
+
+                          if (result == true) {
+                            onTaskDeleted();
+                          }
+                        },
+                      ),
+                    ),
+                  );
                 },
-              )
-              : const Center(child: CircularProgressIndicator()),
-    );
+              );
+            } else {
+              return const Center(
+                child: Text('No tasks found.', style: TextStyle(fontSize: 16)),
+              );
+            }
+          },
+        )
+        : const Center(child: CircularProgressIndicator());
   }
 }
